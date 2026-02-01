@@ -13,9 +13,9 @@
   --border: #2a2a3a;
   --text: #e4e4ef;
   --text-muted: #8888a0;
-  --accent: #4ade80;
-  --accent-dim: #22c55e;
-  --accent-glow: rgba(74, 222, 128, 0.15);
+  --accent: #ef4444;
+  --accent-dim: #dc2626;
+  --accent-glow: rgba(239, 68, 68, 0.15);
   --founders: #f59e0b;
   --founders-glow: rgba(245, 158, 11, 0.15);
   --radius: 12px;
@@ -256,6 +256,60 @@ body {
   font-size: 1.05rem;
   max-width: 550px;
   margin: 0 auto 48px;
+}
+
+/* ===== How It Works ===== */
+.how-it-works {
+  padding: 100px 0;
+  background: var(--surface);
+}
+
+.steps-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.step-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 32px 24px;
+  text-align: center;
+  transition: all 0.25s;
+}
+
+.step-card:hover {
+  border-color: var(--accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+}
+
+.step-number {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  border: 2px solid var(--accent);
+  color: var(--accent);
+  font-size: 1.3rem;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 18px;
+}
+
+.step-card h3 {
+  font-size: 1.15rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.step-card p {
+  color: var(--text-muted);
+  font-size: 0.92rem;
+  line-height: 1.6;
 }
 
 /* ===== Features ===== */

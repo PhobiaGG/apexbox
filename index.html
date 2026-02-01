@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexBox - Navigate Anywhere, Offline, Always</title>
-  <meta name="description" content="ApexBox is a rugged, offline GPS navigation device for hikers, bikers, and adventurers. No phone needed. No cell service required.">
+  <title>ApexBox - Race-Grade OBD2 & GPS Telemetry</title>
+  <meta name="description" content="ApexBox is a headless, high-performance OBD2 and 25Hz GPS telemetry module for track days, racing, and performance driving. Plug in. Drive. Analyze.">
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -17,6 +17,7 @@
       </a>
       <ul class="nav-links">
         <li><a href="#features">Features</a></li>
+        <li><a href="#how-it-works">How It Works</a></li>
         <li><a href="#video">Preview</a></li>
         <li><a href="#specs">Specs</a></li>
         <li><a href="#pricing">Pricing</a></li>
@@ -32,10 +33,10 @@
   <section class="hero">
     <div class="container hero-content">
       <div class="hero-badge">Coming Soon</div>
-      <h1>Navigate Anywhere.<br><span class="highlight">Offline. Always.</span></h1>
+      <h1>Your Car's Black Box.<br><span class="highlight">Race-Grade Telemetry.</span></h1>
       <p class="hero-sub">
-        ApexBox is a rugged, standalone GPS navigation device built for outdoor
-        enthusiasts who need reliable navigation without a smartphone or cell service.
+        ApexBox is a headless OBD2 and GPS telemetry module that pulls real-time engine
+        data and 25Hz positioning straight to your phone. No screen. No buttons. Just data.
       </p>
       <div class="hero-actions">
         <a href="#preorder" class="btn btn-primary">Join the Waitlist</a>
@@ -43,20 +44,45 @@
       </div>
       <div class="hero-stats">
         <div class="stat">
-          <span class="stat-value">10Hz</span>
+          <span class="stat-value">25Hz</span>
           <span class="stat-label">GPS Updates</span>
         </div>
         <div class="stat">
-          <span class="stat-value">9-Axis</span>
-          <span class="stat-label">IMU Sensor</span>
+          <span class="stat-value">OBD2</span>
+          <span class="stat-label">Direct ECU Link</span>
         </div>
         <div class="stat">
-          <span class="stat-value">12hr</span>
-          <span class="stat-label">Battery Life</span>
+          <span class="stat-value">BLE 5.0</span>
+          <span class="stat-label">Wireless Data</span>
         </div>
         <div class="stat">
-          <span class="stat-value">Offline</span>
-          <span class="stat-label">Maps & Nav</span>
+          <span class="stat-value">Headless</span>
+          <span class="stat-label">Zero Distraction</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section id="how-it-works" class="how-it-works">
+    <div class="container">
+      <h2 class="section-title">Three Steps. That's It.</h2>
+      <p class="section-sub">No configuration screens. No setup wizards. Plug it in and drive.</p>
+      <div class="steps-grid">
+        <div class="step-card">
+          <div class="step-number">1</div>
+          <h3>Plug Into OBD2</h3>
+          <p>Connect the ApexBox to your car's OBD2 port. It powers on automatically and starts reading ECU data within seconds.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">2</div>
+          <h3>Stick to Dash</h3>
+          <p>Mount the module on your dashboard. The matte black housing disappears into your interior -- no screen, no distraction.</p>
+        </div>
+        <div class="step-card">
+          <div class="step-number">3</div>
+          <h3>View Data on Phone</h3>
+          <p>Open the ApexBox app. Live telemetry streams over Bluetooth 5.0 -- lap times, engine temps, GPS traces, all in real time.</p>
         </div>
       </div>
     </div>
@@ -65,48 +91,48 @@
   <!-- Features -->
   <section id="features" class="features">
     <div class="container">
-      <h2 class="section-title">Built for the Trail</h2>
-      <p class="section-sub">Professional-grade navigation in a pocket-sized, rugged device.</p>
+      <h2 class="section-title">Built for the Track</h2>
+      <p class="section-sub">Professional telemetry in a module that fits in your palm.</p>
       <div class="features-grid">
         <div class="feature-card">
-          <div class="feature-icon">&#127759;</div>
-          <h3>Offline Maps</h3>
-          <p>Pre-loaded OpenStreetMap tiles on SD card. No internet or cell service needed -- ever.</p>
-        </div>
-        <div class="feature-card">
           <div class="feature-icon">&#128752;</div>
-          <h3>Multi-GNSS</h3>
-          <p>GPS, GLONASS, Galileo, and BeiDou. 2.5m accuracy with fast satellite lock in under 30 seconds.</p>
+          <h3>25Hz GNSS Positioning</h3>
+          <p>Professional-grade multi-constellation receiver at 25 updates per second. Smooth trajectory analysis and race-grade lap timing that 10Hz pucks can't match.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#129517;</div>
-          <h3>Sensor Fusion</h3>
-          <p>9-axis IMU with hardware-accelerated fusion. Dead reckoning keeps you on track when GPS drops out.</p>
+          <div class="feature-icon">&#128663;</div>
+          <h3>Direct OBD2 Data Bridge</h3>
+          <p>Pulls live ECU data straight from your car -- intake temps, coolant temperature, AFR, RPM, throttle position, boost pressure, and more.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#127777;</div>
-          <h3>Environmental Sensors</h3>
-          <p>Barometric altimeter, temperature, humidity. Monitor weather trends and accurate elevation data.</p>
+          <div class="feature-icon">&#9201;</div>
+          <h3>Automatic Lap Timing</h3>
+          <p>Set a start/finish line and ApexBox handles the rest. 25Hz GPS means timing precision that captures every apex, not just straight-line points.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128267;</div>
-          <h3>Physical Controls</h3>
-          <p>Rotary encoder and tactile buttons. Designed to work with gloves in any weather condition.</p>
+          <div class="feature-icon">&#128225;</div>
+          <h3>BLE 5.0 + Wi-Fi Streaming</h3>
+          <p>Real-time telemetry streams to your phone over Bluetooth 5.0. Wi-Fi available for bulk data transfer and firmware updates.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128268;</div>
-          <h3>USB-C & Long Battery</h3>
-          <p>8-12 hours of active navigation. USB-C charging. Power save mode extends life even further.</p>
+          <div class="feature-icon">&#128373;</div>
+          <h3>Headless Ghost Box Design</h3>
+          <p>Matte black, no screen, no buttons. Sits on your dash and disappears. Turns on with your car, sleeps when you park. Zero interaction required.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">&#128200;</div>
-          <h3>Track Recording</h3>
-          <p>Record your adventures as GPX tracks. Export, share, and review your routes on any mapping software.</p>
+          <h3>Session Recording & Export</h3>
+          <p>Every session is logged locally. Export GPS traces and OBD2 data for post-session analysis in your favorite telemetry software.</p>
         </div>
         <div class="feature-card">
-          <div class="feature-icon">&#128264;</div>
-          <h3>Audio Navigation</h3>
-          <p>Voice prompts for turn-by-turn guidance. Keep your eyes on the trail, not the screen.</p>
+          <div class="feature-icon">&#9889;</div>
+          <h3>12V OBD2 Power</h3>
+          <p>Powered directly from your car's OBD2 port. Auto-wake when the ignition is on, auto-sleep when you shut off. No charging, no batteries to manage.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">&#128293;</div>
+          <h3>Heat-Resistant Housing</h3>
+          <p>MJF Nylon PA12 enclosure rated for high cabin temperatures. Built to survive track day heat soak without breaking a sweat.</p>
         </div>
       </div>
     </div>
@@ -116,17 +142,17 @@
   <section id="video" class="video-section">
     <div class="container">
       <h2 class="section-title">See It In Action</h2>
-      <p class="section-sub">A preview of the ApexBox module in the wild.</p>
+      <p class="section-sub">ApexBox on track, streaming live telemetry.</p>
       <div class="video-wrapper">
         <div class="video-placeholder" id="videoPlayer">
           <div class="play-icon">&#9654;</div>
           <p>Video preview coming soon</p>
-          <span class="video-note">We're currently finalizing the first working prototype. Check back soon for a full demo video.</span>
+          <span class="video-note">We're finalizing the first production module. Check back soon for a full track day demo.</span>
         </div>
         <!-- When you have a YouTube video, replace the placeholder above with:
         <iframe
           src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-          title="ApexBox Preview"
+          title="ApexBox Track Day Demo"
           frameborder="0"
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowfullscreen>
@@ -145,49 +171,49 @@
         <div class="spec-group">
           <h4>Processor</h4>
           <ul>
-            <li>ESP32 Dual-Core @ 240MHz</li>
-            <li>520KB SRAM, 4MB Flash</li>
-            <li>WiFi + Bluetooth 4.2</li>
+            <li>ESP32-S3 Dual-Core @ 240MHz</li>
+            <li>512KB SRAM, 8MB Flash</li>
+            <li>Hardware accelerated encryption</li>
           </ul>
         </div>
         <div class="spec-group">
-          <h4>Display</h4>
+          <h4>GNSS</h4>
           <ul>
-            <li>3.2" IPS LCD (240x320)</li>
-            <li>65K colors, dimmable backlight</li>
-            <li>Sunlight readable</li>
+            <li>25Hz Multi-Constellation</li>
+            <li>GPS / GLONASS / Galileo</li>
+            <li>Race-grade trajectory & lap timing</li>
           </ul>
         </div>
         <div class="spec-group">
-          <h4>GPS</h4>
+          <h4>OBD2 Interface</h4>
           <ul>
-            <li>u-blox SAM-M10Q</li>
-            <li>GPS / GLONASS / Galileo / BeiDou</li>
-            <li>10Hz update, 2.5m accuracy</li>
+            <li>Direct ECU data bridge</li>
+            <li>CAN bus (ISO 15765-4)</li>
+            <li>RPM, temps, AFR, boost, throttle</li>
           </ul>
         </div>
         <div class="spec-group">
-          <h4>Sensors</h4>
+          <h4>Connectivity</h4>
           <ul>
-            <li>BNO055 9-Axis IMU</li>
-            <li>BME280 Baro/Temp/Humidity</li>
-            <li>VEML7700 Ambient Light</li>
+            <li>Bluetooth 5.0 (BLE)</li>
+            <li>Wi-Fi 802.11 b/g/n</li>
+            <li>Real-time telemetry streaming</li>
           </ul>
         </div>
         <div class="spec-group">
           <h4>Power</h4>
           <ul>
-            <li>3.7V LiPo (2000-3000mAh)</li>
-            <li>8-12 hour runtime</li>
-            <li>USB-C charging</li>
+            <li>12V via OBD2 port</li>
+            <li>Auto-wake on ignition</li>
+            <li>Auto-sleep on shutdown</li>
           </ul>
         </div>
         <div class="spec-group">
-          <h4>Physical</h4>
+          <h4>Housing</h4>
           <ul>
-            <li>~60mm x 90mm x 20mm</li>
-            <li>~150g with battery</li>
-            <li>Splash-resistant enclosure</li>
+            <li>MJF Nylon PA12 (Matte Black)</li>
+            <li>Heat resistant enclosure</li>
+            <li>Compact, screenless design</li>
           </ul>
         </div>
       </div>
@@ -198,22 +224,22 @@
   <section id="pricing" class="pricing-section">
     <div class="container">
       <h2 class="section-title">Get Your ApexBox</h2>
-      <p class="section-sub">Hand-built, open-source, and made for adventure.</p>
+      <p class="section-sub">Hand-built performance telemetry, priced for grassroots motorsport.</p>
       <div class="pricing-grid">
         <div class="price-card founders">
           <div class="price-badge">Founders Edition</div>
           <div class="price-tag">$179</div>
           <p class="price-note">Limited to the first 15 units</p>
           <ul class="price-features">
-            <li>Full ApexBox module</li>
-            <li>3.2" IPS display</li>
-            <li>Multi-GNSS navigation</li>
-            <li>9-axis IMU sensor fusion</li>
-            <li>Environmental sensors</li>
-            <li>Pre-loaded regional maps</li>
-            <li>USB-C cable included</li>
+            <li>ApexBox telemetry module</li>
+            <li>25Hz GNSS positioning</li>
+            <li>Direct OBD2 data bridge</li>
+            <li>BLE 5.0 + Wi-Fi connectivity</li>
+            <li>MJF Nylon PA12 housing</li>
+            <li>OBD2 cable included</li>
             <li>Founders Edition engraving</li>
-            <li>Early access to firmware updates</li>
+            <li>Early access to app & firmware updates</li>
+            <li>Direct line to the dev team</li>
           </ul>
           <a href="#preorder" class="btn btn-primary btn-full">Join Waitlist</a>
         </div>
@@ -221,13 +247,12 @@
           <div class="price-tag">$249</div>
           <p class="price-note">Standard pricing after Founders run</p>
           <ul class="price-features">
-            <li>Full ApexBox module</li>
-            <li>3.2" IPS display</li>
-            <li>Multi-GNSS navigation</li>
-            <li>9-axis IMU sensor fusion</li>
-            <li>Environmental sensors</li>
-            <li>Pre-loaded regional maps</li>
-            <li>USB-C cable included</li>
+            <li>ApexBox telemetry module</li>
+            <li>25Hz GNSS positioning</li>
+            <li>Direct OBD2 data bridge</li>
+            <li>BLE 5.0 + Wi-Fi connectivity</li>
+            <li>MJF Nylon PA12 housing</li>
+            <li>OBD2 cable included</li>
           </ul>
           <a href="#preorder" class="btn btn-outline btn-full">Join Waitlist</a>
         </div>
@@ -263,8 +288,12 @@
           </select>
         </div>
         <div class="form-group">
+          <label for="car">What do you drive? (optional)</label>
+          <input type="text" id="car" name="car" placeholder="e.g. 2019 Mazda Miata, E36 M3, BRZ...">
+        </div>
+        <div class="form-group">
           <label for="message">Anything else? (optional)</label>
-          <textarea id="message" name="message" rows="3" placeholder="Questions, feature requests, use case..."></textarea>
+          <textarea id="message" name="message" rows="3" placeholder="Track day experience, features you want, questions..."></textarea>
         </div>
         <input type="hidden" name="_subject" value="New ApexBox Waitlist Signup!">
         <button type="submit" class="btn btn-primary btn-full">Sign Up for Updates</button>
@@ -281,10 +310,11 @@
     <div class="container footer-content">
       <div class="footer-brand">
         <span class="logo"><span class="logo-icon">&#9650;</span> ApexBox</span>
-        <p>Navigate Anywhere, Offline, Always.</p>
+        <p>Race-Grade Telemetry. Plug In. Drive. Analyze.</p>
       </div>
       <div class="footer-links">
         <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
         <a href="#specs">Specs</a>
         <a href="#pricing">Pricing</a>
         <a href="#preorder">Waitlist</a>
