@@ -173,6 +173,13 @@ body {
   background: radial-gradient(ellipse at 50% 0%, var(--accent-glow) 0%, transparent 60%);
 }
 
+.hero-badges {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
 .hero-badge {
   display: inline-block;
   padding: 6px 16px;
@@ -182,8 +189,12 @@ body {
   color: var(--accent);
   font-size: 0.85rem;
   font-weight: 600;
-  margin-bottom: 24px;
   letter-spacing: 0.5px;
+}
+
+.patent-badge {
+  color: var(--text-muted);
+  border-color: var(--border);
 }
 
 .hero h1 {
