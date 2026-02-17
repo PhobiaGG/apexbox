@@ -52,9 +52,9 @@
 ## 🔗 Links & Resources
 
 *   **🌐 Official Website:** [phobiagg.github.io/apexbox](https://phobiagg.github.io/apexbox/)
-*   **💬 Discord Community:** [Join the Waitlist & Chat](https://discord.gg/YOUR_INVITE_LINK)
+*   **💬 Discord Community:** [Join the Waitlist & Chat](https://discord.gg/hTatvkvaaM)
 *   **📄 Documentation:** See `MASTER_DOCUMENTATION.md` for technical details.
 
 ---
 
-**Copyright © 2026 Jaiden James (ApexBox). Patent Pending. All Rights Reserved.**
+**Copyright © 2026 ApexBox Team. Patent Pending. All Rights Reserved.**
