@@ -1,392 +1,207 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="bg-black text-white">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ApexBox - Race-Grade OBD2 & GPS Telemetry</title>
-  <meta name="description" content="ApexBox is a headless, high-performance OBD2 and 25Hz GPS telemetry module for track days, racing, and performance driving. Plug in. Drive. Analyze.">
-  <link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ApexBox | High-Fidelity Vehicle Telemetry</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+        }
+        .font-mono {
+            font-family: 'JetBrains Mono', monospace;
+        }
+        .brutalist-border {
+            border: 1px solid #1a1a1a;
+        }
+        .accent-blue {
+            color: #3b82f6;
+        }
+        .bg-accent-blue {
+            background-color: #3b82f6;
+        }
+        .bento-card {
+            background-color: #09090b;
+            border: 1px solid #1a1a1a;
+            transition: border-color 0.3s ease;
+        }
+        .bento-card:hover {
+            border-color: #3b82f6;
+        }
+        video {
+            filter: grayscale(1) brightness(1.2);
+        }
+    </style>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        dark: '#000000',
+                        card: '#09090b',
+                        accent: '#3b82f6', // Electric Blue
+                    }
+                }
+            }
+        }
+    </script>
 </head>
-<body>
+<body class="selection:bg-accent selection:text-white">
 
-  <!-- Navigation -->
-  <nav class="navbar">
-    <div class="container nav-container">
-      <a href="#" class="logo">
-        <span class="logo-icon">&#9650;</span> ApexBox
-      </a>
-      <ul class="nav-links">
-        <li><a href="#features">Features</a></li>
-        <li><a href="#how-it-works">How It Works</a></li>
-        <li><a href="#video">Preview</a></li>
-        <li><a href="#specs">Specs</a></li>
-        <li><a href="#pricing">Pricing</a></li>
-        <li><a href="#preorder" class="nav-cta">Pre-Order</a></li>
-      </ul>
-      <button class="mobile-toggle" aria-label="Toggle menu">
-        <span></span><span></span><span></span>
-      </button>
-    </div>
-  </nav>
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5 py-4">
+        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
+            <div class="font-mono font-bold tracking-tighter text-xl">
+                APEX<span class="text-accent">BOX</span>
+            </div>
+            <div class="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest text-zinc-500">
+                <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+                <a href="#docs" class="hover:text-white transition-colors">Documentation</a>
+                <a href="#specs" class="hover:text-white transition-colors">Specs</a>
+            </div>
+        </div>
+    </nav>
 
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container hero-content">
-      <div class="hero-badges">
-        <div class="hero-badge">Coming Soon</div>
-        <div class="hero-badge patent-badge">Patent Pending</div>
-      </div>
-      <h1>Your Car's Black Box.<br><span class="highlight">Race-Grade Telemetry.</span></h1>
-      <p class="hero-sub">
-        ApexBox is a headless OBD2 and GPS telemetry module that pulls real-time engine
-        data and 25Hz positioning straight to your phone. No screen. No buttons. Just data.
-      </p>
-      <div class="hero-actions">
-        <a href="#preorder" class="btn btn-primary">Join the Waitlist</a>
-        <a href="https://discord.gg/hTatvkvaaM" class="btn btn-outline">Join Discord</a>
-      </div>
-      <div class="hero-stats">
-        <div class="stat">
-          <span class="stat-value">25Hz</span>
-          <span class="stat-label">GPS Updates</span>
+    <!-- Section 1: Hero Header -->
+    <section class="max-w-7xl mx-auto px-6 py-20 lg:py-32">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+            <!-- Left Side -->
+            <div class="space-y-8">
+                <h1 class="text-5xl lg:text-7xl font-black tracking-tight leading-none">
+                    High-Fidelity <br/>
+                    <span class="text-zinc-500">Vehicle Telemetry.</span>
+                </h1>
+                <p class="text-xl text-zinc-400 font-mono">
+                    Raw CAN bus integration. Hardware-fused 9-axis kinematics. Powered by ESP32-S3.
+                </p>
+                <div>
+                    <a href="#architecture" class="inline-block bg-accent hover:bg-blue-600 text-white font-mono font-bold py-4 px-8 uppercase tracking-widest transition-all">
+                        View Architecture
+                    </a>
+                </div>
+            </div>
+            <!-- Right Side -->
+            <div class="relative aspect-square lg:aspect-video overflow-hidden rounded-lg bg-zinc-900/50 brutalist-border">
+                <video 
+                    class="absolute inset-0 w-full h-full object-cover"
+                    autoplay 
+                    loop 
+                    muted 
+                    playsinline
+                >
+                    <source src="0001-0250.webm" type="video/webm">
+                </video>
+            </div>
         </div>
-        <div class="stat">
-          <span class="stat-value">OBD2</span>
-          <span class="stat-label">Direct ECU Link</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">BLE 5.0</span>
-          <span class="stat-label">Wireless Data</span>
-        </div>
-        <div class="stat">
-          <span class="stat-value">Headless</span>
-          <span class="stat-label">Zero Distraction</span>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- How It Works -->
-  <section id="how-it-works" class="how-it-works">
-    <div class="container">
-      <h2 class="section-title">Three Steps. That's It.</h2>
-      <p class="section-sub">No configuration screens. No setup wizards. Plug it in and drive.</p>
-      <div class="steps-grid">
-        <div class="step-card">
-          <div class="step-number">1</div>
-          <h3>Plug Into OBD2</h3>
-          <p>Connect the ApexBox to your car's OBD2 port. It powers on automatically and starts reading ECU data within seconds.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">2</div>
-          <h3>Stick to Dash</h3>
-          <p>Mount the module on your dashboard. The matte black housing disappears into your interior -- no screen, no distraction.</p>
-        </div>
-        <div class="step-card">
-          <div class="step-number">3</div>
-          <h3>View Data on Phone</h3>
-          <p>Open the ApexBox app. Live telemetry streams over Bluetooth 5.0 -- lap times, engine temps, GPS traces, all in real time.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    <!-- Section 2: Bento Box Architecture Grid -->
+    <section id="architecture" class="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
+        <h2 class="font-mono text-xs uppercase tracking-[0.3em] text-accent mb-12">Core Architecture</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[180px]">
+            
+            <!-- Card 1 -->
+            <div class="bento-card p-8 flex flex-col justify-between md:col-span-2">
+                <i data-lucide="cpu" class="text-accent w-8 h-8"></i>
+                <div>
+                    <h3 class="font-mono text-lg font-bold">Dual-Core ESP32-S3 Processing.</h3>
+                    <p class="text-zinc-500 text-sm mt-2">240MHz Xtensa® LX7 with integrated AI acceleration for real-time sensor fusion.</p>
+                </div>
+            </div>
 
-  <!-- Features -->
-  <section id="features" class="features">
-    <div class="container">
-      <h2 class="section-title">Built for the Track</h2>
-      <p class="section-sub">Professional telemetry in a module that fits in your palm.</p>
-      <div class="features-grid">
-        <div class="feature-card">
-          <div class="feature-icon">&#128752;</div>
-          <h3>25Hz GNSS Positioning</h3>
-          <p>Professional-grade multi-constellation receiver at 25 updates per second. Smooth trajectory analysis and race-grade lap timing that 10Hz pucks can't match.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#128663;</div>
-          <h3>Direct OBD2 Data Bridge</h3>
-          <p>Pulls live ECU data straight from your car -- intake temps, coolant temperature, AFR, RPM, throttle position, boost pressure, and more.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#9201;</div>
-          <h3>Automatic Lap Timing</h3>
-          <p>Set a start/finish line and ApexBox handles the rest. 25Hz GPS means timing precision that captures every apex, not just straight-line points.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#128225;</div>
-          <h3>BLE 5.0 + Wi-Fi Streaming</h3>
-          <p>Real-time telemetry streams to your phone over Bluetooth 5.0. Wi-Fi available for bulk data transfer and firmware updates.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#128373;</div>
-          <h3>Headless Ghost Box Design</h3>
-          <p>Matte black, no screen, no buttons. Sits on your dash and disappears. Turns on with your car, sleeps when you park. Zero interaction required.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#128200;</div>
-          <h3>Session Recording & Export</h3>
-          <p>Every session is logged locally. Export GPS traces and OBD2 data for post-session analysis in your favorite telemetry software.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#9889;</div>
-          <h3>12V OBD2 Power</h3>
-          <p>Powered directly from your car's OBD2 port. Auto-wake when the ignition is on, auto-sleep when you shut off. No charging, no batteries to manage.</p>
-        </div>
-        <div class="feature-card">
-          <div class="feature-icon">&#128293;</div>
-          <h3>Heat-Resistant Housing</h3>
-          <p>MJF Nylon PA12 enclosure rated for high cabin temperatures. Built to survive track day heat soak without breaking a sweat.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+            <!-- Card 2 -->
+            <div class="bento-card p-8 flex flex-col justify-between">
+                <i data-lucide="compass" class="text-accent w-8 h-8"></i>
+                <div>
+                    <h3 class="font-mono text-lg font-bold">9-Axis BNO055 IMU.</h3>
+                    <p class="text-zinc-500 text-sm mt-2">Hardware-fused kinematics at 100Hz.</p>
+                </div>
+            </div>
 
-  <!-- Video Preview -->
-  <section id="video" class="video-section">
-    <div class="container">
-      <h2 class="section-title">See It In Action</h2>
-      <p class="section-sub">ApexBox on track, streaming live telemetry.</p>
-      <div class="video-wrapper">
-        <div class="video-placeholder" id="videoPlayer">
-          <div class="play-icon">&#9654;</div>
-          <p>Video preview coming soon</p>
-          <span class="video-note">We're finalizing the first production module. Check back soon for a full track day demo.</span>
-        </div>
-        <!-- When you have a YouTube video, replace the placeholder above with:
-        <iframe
-          src="https://www.youtube.com/embed/YOUR_VIDEO_ID"
-          title="ApexBox Track Day Demo"
-          frameborder="0"
-          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-          allowfullscreen>
-        </iframe>
-        -->
-      </div>
-    </div>
-  </section>
+            <!-- Card 3 -->
+            <div class="bento-card p-8 flex flex-col justify-between lg:row-span-2">
+                <i data-lucide="satellite" class="text-accent w-8 h-8"></i>
+                <div>
+                    <h3 class="font-mono text-lg font-bold">MAX-M10S GNSS.</h3>
+                    <p class="text-zinc-500 text-sm mt-2">Concurrent multi-constellation reception (GPS, GLONASS, Galileo, BeiDou) for sub-meter precision.</p>
+                </div>
+            </div>
 
-  <!-- Comparison / The Edge -->
-  <section class="comparison-section">
-    <div class="container">
-      <h2 class="section-title">The ApexBox Edge</h2>
-      <p class="section-sub">Why pro drivers choose a dedicated module over phone apps or generic OBD2 dongles.</p>
-      
-      <div class="comparison-wrapper">
-        <table class="comparison-table">
-          <thead>
-            <tr>
-              <th>Performance Metric</th>
-              <th>Phone Apps</th>
-              <th>Generic OBD2</th>
-              <th class="highlight-col">ApexBox</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>GPS Refresh Rate</td>
-              <td>1Hz (Updates every 80ft)</td>
-              <td>N/A</td>
-              <td class="highlight-col">25Hz (Updates every 3ft)</td>
-            </tr>
-            <tr>
-              <td>Positional Accuracy</td>
-              <td>+/- 5m (Rough Guess)</td>
-              <td>N/A</td>
-              <td class="highlight-col">< 0.5m (Pinpoint Apex)</td>
-            </tr>
-            <tr>
-              <td>Data Integration</td>
-              <td>Phone Sensors Only</td>
-              <td>Slow OBD2 PIDs</td>
-              <td class="highlight-col">Fused ECU + 25Hz GPS</td>
-            </tr>
-            <tr>
-              <td>Thermal Stability</td>
-              <td>Phone Overheats in Sun</td>
-              <td>Standard Plastic</td>
-              <td class="highlight-col">Heat-Shielded MJF PA12</td>
-            </tr>
-            <tr>
-              <td>Driver Workflow</td>
-              <td>Manual Setup Each Run</td>
-              <td>Plugin & Sync</td>
-              <td class="highlight-col">Set & Forget (Auto-Wake)</td>
-            </tr>
-            <tr>
-              <td>Cockpit Safety</td>
-              <td>Screen Distraction</td>
-              <td>Laggy Data</td>
-              <td class="highlight-col">Zero Distraction (Headless)</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </section>
+            <!-- Card 4 -->
+            <div class="bento-card p-8 flex flex-col justify-between md:col-span-2">
+                <i data-lucide="activity" class="text-accent w-8 h-8"></i>
+                <div>
+                    <h3 class="font-mono text-lg font-bold">Direct OBD2 CAN Transceiver Integration.</h3>
+                    <p class="text-zinc-500 text-sm mt-2">High-speed ISO 15765-4 interface for raw ECU parameter extraction.</p>
+                </div>
+            </div>
 
-  <!-- Specs -->
-  <section id="specs" class="specs-section">
-    <div class="container">
-      <h2 class="section-title">Technical Specifications</h2>
-      <p class="section-sub">What's inside the box.</p>
-      <div class="specs-grid">
-        <div class="spec-group">
-          <h4>Processor</h4>
-          <ul>
-            <li>ESP32-S3 Dual-Core @ 240MHz</li>
-            <li>512KB SRAM, 8MB Flash</li>
-            <li>Hardware accelerated encryption</li>
-          </ul>
-        </div>
-        <div class="spec-group">
-          <h4>GNSS</h4>
-          <ul>
-            <li>25Hz Multi-Constellation</li>
-            <li>GPS / GLONASS / Galileo</li>
-            <li>Race-grade trajectory & lap timing</li>
-          </ul>
-        </div>
-        <div class="spec-group">
-          <h4>OBD2 Interface</h4>
-          <ul>
-            <li>Direct ECU data bridge</li>
-            <li>CAN bus (ISO 15765-4)</li>
-            <li>RPM, temps, AFR, boost, throttle</li>
-          </ul>
-        </div>
-        <div class="spec-group">
-          <h4>Connectivity</h4>
-          <ul>
-            <li>Bluetooth 5.0 (BLE)</li>
-            <li>Wi-Fi 802.11 b/g/n</li>
-            <li>Real-time telemetry streaming</li>
-          </ul>
-        </div>
-        <div class="spec-group">
-          <h4>Power</h4>
-          <ul>
-            <li>12V via OBD2 port</li>
-            <li>Auto-wake on ignition</li>
-            <li>Auto-sleep on shutdown</li>
-          </ul>
-        </div>
-        <div class="spec-group">
-          <h4>Housing</h4>
-          <ul>
-            <li>In Development (CAD Phase)</li>
-            <li>Planned MJF Nylon PA12 (Matte Black)</li>
-            <li>Compact, screenless design</li>
-          </ul>
-        </div>
-      </div>
-    </div>
-  </section>
+            <!-- Extra Info Card -->
+            <div class="bento-card p-8 flex flex-col justify-between">
+                <i data-lucide="shield-check" class="text-accent w-8 h-8"></i>
+                <div>
+                    <h3 class="font-mono text-lg font-bold">Industrial Integrity.</h3>
+                    <p class="text-zinc-500 text-sm mt-2">Voltage transient protection for automotive environments.</p>
+                </div>
+            </div>
 
-  <!-- Pricing -->
-  <section id="pricing" class="pricing-section">
-    <div class="container">
-      <h2 class="section-title">Get Your ApexBox</h2>
-      <p class="section-sub">Hand-built performance telemetry, priced for grassroots motorsport.</p>
-      <div class="pricing-grid">
-        <div class="price-card founders">
-          <div class="price-badge">Founders Edition</div>
-          <div class="price-tag">$179</div>
-          <p class="price-note">Limited to the first 15 units</p>
-          <ul class="price-features">
-            <li>ApexBox telemetry module</li>
-            <li>25Hz GNSS positioning</li>
-            <li>Direct OBD2 data bridge</li>
-            <li>BLE 5.0 + Wi-Fi connectivity</li>
-            <li>MJF Nylon PA12 housing</li>
-            <li>OBD2 cable included</li>
-            <li>Founders Edition engraving</li>
-            <li>Early access to app & firmware updates</li>
-            <li>Direct line to the dev team</li>
-          </ul>
-          <a href="#preorder" class="btn btn-primary btn-full">Join Waitlist</a>
         </div>
-        <div class="price-card standard">
-          <div class="price-tag">$249</div>
-          <p class="price-note">Standard pricing after Founders run</p>
-          <ul class="price-features">
-            <li>ApexBox telemetry module</li>
-            <li>25Hz GNSS positioning</li>
-            <li>Direct OBD2 data bridge</li>
-            <li>BLE 5.0 + Wi-Fi connectivity</li>
-            <li>MJF Nylon PA12 housing</li>
-            <li>OBD2 cable included</li>
-          </ul>
-          <a href="#preorder" class="btn btn-outline btn-full">Join Waitlist</a>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Pre-order / Waitlist -->
-  <section id="preorder" class="preorder-section">
-    <div class="container">
-      <h2 class="section-title">Join the Waitlist</h2>
-      <p class="section-sub">
-        Be the first to know when ApexBox is ready to ship.
-        No payment required -- we'll email you when units are available.
-      </p>
-      <form class="waitlist-form" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <div class="form-row">
-          <div class="form-group">
-            <label for="name">Name</label>
-            <input type="text" id="name" name="name" placeholder="Your name" required>
-          </div>
-          <div class="form-group">
-            <label for="email">Email</label>
-            <input type="email" id="email" name="email" placeholder="you@example.com" required>
-          </div>
+    <!-- Section 3: Documentation / Deep Dive -->
+    <section id="docs" class="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div>
+                <h2 class="font-mono text-xs uppercase tracking-[0.3em] text-accent mb-8">Engineering Notes</h2>
+                <div class="space-y-12">
+                    <div class="group">
+                        <h3 class="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">PCB Routing Logic</h3>
+                        <p class="text-zinc-400 leading-relaxed font-mono text-sm">
+                            Isolating high-frequency engine harmonics via dedicated ground plane design. 
+                            Controlled impedance differential pairs for high-speed CAN signals ensure 
+                            zero packet loss even in EMI-heavy engine bays.
+                        </p>
+                    </div>
+                    <div class="group">
+                        <h3 class="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Power Delivery Specs</h3>
+                        <p class="text-zinc-400 leading-relaxed font-mono text-sm">
+                            Integrated buck-boost stage supporting 6V to 36V input. 
+                            Ultra-low noise LDOs for the GNSS and IMU rails to preserve signal 
+                            integrity during high-load ECU polling.
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="space-y-4">
+                <div class="aspect-video bg-zinc-900 brutalist-border flex items-center justify-center relative group">
+                    <span class="font-mono text-zinc-700 uppercase tracking-widest group-hover:text-accent transition-colors">[ KiCad Schematic Placeholder ]</span>
+                    <div class="absolute bottom-4 left-4 font-mono text-[10px] text-zinc-500">REF: APX-SCH-V1.2</div>
+                </div>
+                <div class="aspect-video bg-zinc-900 brutalist-border flex items-center justify-center relative group">
+                    <span class="font-mono text-zinc-700 uppercase tracking-widest group-hover:text-accent transition-colors">[ PCB Layout Placeholder ]</span>
+                    <div class="absolute bottom-4 left-4 font-mono text-[10px] text-zinc-500">LAYER: SIGNAL_TOP / GND_INNER</div>
+                </div>
+            </div>
         </div>
-        <div class="form-group">
-          <label for="edition">Which edition are you interested in?</label>
-          <select id="edition" name="edition">
-            <option value="founders">Founders Edition ($179)</option>
-            <option value="standard">Standard ($249)</option>
-            <option value="undecided">Not sure yet</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label for="car">What do you drive? (optional)</label>
-          <input type="text" id="car" name="car" placeholder="e.g. 2019 Mazda Miata, E36 M3, BRZ...">
-        </div>
-        <div class="form-group">
-          <label for="message">Anything else? (optional)</label>
-          <textarea id="message" name="message" rows="3" placeholder="Track day experience, features you want, questions..."></textarea>
-        </div>
-        <input type="hidden" name="_subject" value="New ApexBox Waitlist Signup!">
-        <button type="submit" class="btn btn-primary btn-full">Sign Up for Updates</button>
-      </form>
-      <div class="form-success" id="formSuccess" style="display:none;">
-        <h3>You're on the list!</h3>
-        <p>We'll email you as soon as ApexBox is ready to ship.</p>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container footer-content">
-      <div class="footer-brand">
-        <span class="logo"><span class="logo-icon">&#9650;</span> ApexBox</span>
-        <p>Race-Grade Telemetry. Plug In. Drive. Analyze.</p>
-      </div>
-      <div class="footer-links">
-        <a href="#features">Features</a>
-        <a href="#how-it-works">How It Works</a>
-        <a href="#specs">Specs</a>
-        <a href="#pricing">Pricing</a>
-        <a href="https://discord.gg/hTatvkvaaM">Waitlist</a>
-      </div>
-      <div class="footer-copy">
-        &copy; 2026 ApexBox. Patent Pending. All rights reserved.
-      </div>
-    </div>
-  </footer>
+    <!-- Footer -->
+    <footer class="max-w-7xl mx-auto px-6 py-12 border-t border-white/5 text-center">
+        <div class="font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
+            &copy; 2026 APEXBOX // NO MARKETING FLUFF // PURE DATA
+        </div>
+    </footer>
 
-  <script src="script.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
 </body>
 </html>
