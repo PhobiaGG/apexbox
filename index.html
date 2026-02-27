@@ -1,207 +1,747 @@
 <!DOCTYPE html>
-<html lang="en" class="bg-black text-white">
+<html lang="en" class="bg-[#09090b] text-zinc-200">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ApexBox | High-Fidelity Vehicle Telemetry</title>
+    <title>ApexBox | Professional Racing Telemetry</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: #000000;
-        }
-        .font-mono {
-            font-family: 'JetBrains Mono', monospace;
-        }
-        .brutalist-border {
-            border: 1px solid #1a1a1a;
-        }
-        .accent-blue {
-            color: #3b82f6;
-        }
-        .bg-accent-blue {
-            background-color: #3b82f6;
-        }
-        .bento-card {
-            background-color: #09090b;
-            border: 1px solid #1a1a1a;
-            transition: border-color 0.3s ease;
-        }
-        .bento-card:hover {
-            border-color: #3b82f6;
-        }
-        video {
-            filter: grayscale(1) brightness(1.2);
-        }
-    </style>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        dark: '#000000',
-                        card: '#09090b',
-                        accent: '#3b82f6', // Electric Blue
-                    }
-                }
-            }
-        }
-    </script>
-</head>
-<body class="selection:bg-accent selection:text-white">
+        body { font-family: 'Inter', sans-serif; letter-spacing: -0.01em; }
+        .font-mono { font-family: 'JetBrains Mono', monospace; }
+        .hero-glow { background: radial-gradient(circle at 50% 30%, rgba(59, 130, 246, 0.1) 0%, transparent 70%); }
+        .dashboard-glass { background: rgba(255, 255, 255, 0.03); backdrop-filter: blur(20px); border: 1px solid rgba(255, 255, 255, 0.08); }
+        .text-glow { text-shadow: 0 0 20px rgba(59, 130, 246, 0.5); }
+        .btn-primary { background-color: #3b82f6; transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1); }
+        .btn-primary:hover { background-color: #2563eb; transform: translateY(-2px); box-shadow: 0 10px 30px rgba(59, 130, 246, 0.3); }
+        input { background-color: #09090b !important; border: 1px solid #27272a !important; }
+        input:focus { border-color: #3b82f6 !important; outline: none; }
 
-    <!-- Navigation -->
-    <nav class="sticky top-0 z-50 bg-black/80 backdrop-blur-md border-b border-white/5 py-4">
-        <div class="max-w-7xl mx-auto px-6 flex justify-between items-center">
-            <div class="font-mono font-bold tracking-tighter text-xl">
-                APEX<span class="text-accent">BOX</span>
+        /* Ticker Fading Mask */
+        .ticker-mask {
+            -webkit-mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+            mask-image: linear-gradient(to right, transparent, black 15%, black 85%, transparent);
+        }
+
+        /* Ticker Animation */
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+        .animate-ticker {
+            animation: ticker 30s linear infinite;
+        }
+
+        /* 25Hz Slider Utilities */
+        .comparison-slider {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 100%;
+            background: transparent;
+            outline: none;
+            margin: 0;
+            z-index: 40;
+            cursor: ew-resize;
+        }
+        .comparison-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 4px;
+            height: 400px;
+            background: transparent;
+        }
+
+        /* 3D Hover Utilities */
+        .perspective-1000 { perspective: 1000px; }
+        .hover-tilt {
+            transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            transform-style: preserve-3d;
+        }
+        .hover-tilt:hover {
+            transform: translateY(-8px) rotateY(12deg);
+        }
+
+        .bar-glow { box-shadow: 0 0 15px rgba(59, 130, 246, 0.4); }
+    </style>
+</head>
+<body class="antialiased selection:bg-blue-500 selection:text-white">
+
+    <nav class="fixed top-0 w-full z-50 border-b border-zinc-800/50 bg-[#09090b]/80 backdrop-blur-md py-5">
+        <div class="max-w-7xl mx-auto px-8 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <span class="font-black text-2xl tracking-tighter text-white font-mono">APEX<span class="text-blue-500 italic">BOX</span></span>
+                <span class="hidden sm:inline-block bg-zinc-800 text-[9px] font-mono px-2 py-0.5 rounded text-zinc-400 tracking-widest uppercase">System_v3.0</span>
             </div>
-            <div class="hidden md:flex gap-8 font-mono text-sm uppercase tracking-widest text-zinc-500">
-                <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
-                <a href="#docs" class="hover:text-white transition-colors">Documentation</a>
-                <a href="#specs" class="hover:text-white transition-colors">Specs</a>
+            <div class="flex items-center gap-10 text-xs font-bold uppercase tracking-widest text-zinc-400">
+                <a href="#features" class="hover:text-white transition-colors">Features</a>
+                <a href="#dashboard" class="hover:text-white transition-colors">Data</a>
+                <a href="#waitlist" class="bg-white text-black px-6 py-2.5 rounded-lg hover:bg-blue-500 hover:text-white transition-all">Founders Run</a>
             </div>
         </div>
     </nav>
 
-    <!-- Section 1: Hero Header -->
-    <section class="max-w-7xl mx-auto px-6 py-20 lg:py-32">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-            <!-- Left Side -->
-            <div class="space-y-8">
-                <h1 class="text-5xl lg:text-7xl font-black tracking-tight leading-none">
-                    High-Fidelity <br/>
-                    <span class="text-zinc-500">Vehicle Telemetry.</span>
-                </h1>
-                <p class="text-xl text-zinc-400 font-mono">
-                    Raw CAN bus integration. Hardware-fused 9-axis kinematics. Powered by ESP32-S3.
-                </p>
-                <div>
-                    <a href="#architecture" class="inline-block bg-accent hover:bg-blue-600 text-white font-mono font-bold py-4 px-8 uppercase tracking-widest transition-all">
-                        View Architecture
-                    </a>
-                </div>
+    <section class="relative min-h-screen flex flex-col items-center justify-center pt-40 pb-20 px-6 hero-glow">
+        <div class="max-w-5xl w-full text-center space-y-10 mb-20">
+            <div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/20">
+                <span class="w-2 h-2 rounded-full bg-blue-500 animate-pulse"></span>
+                <span class="text-[10px] font-bold text-blue-500 uppercase tracking-[0.2em]">10 Founding Slots Remaining</span>
             </div>
-            <!-- Right Side -->
-            <div class="relative aspect-square lg:aspect-video overflow-hidden rounded-lg bg-zinc-900/50 brutalist-border">
-                <video 
-                    class="absolute inset-0 w-full h-full object-cover"
-                    autoplay 
-                    loop 
-                    muted 
-                    playsinline
-                >
-                    <source src="0001-0250.webm" type="video/webm">
-                </video>
+            <h1 class="text-6xl md:text-8xl font-black text-white leading-[0.9] tracking-tighter">
+                Stop Guessing. <br/>
+                <span class="text-zinc-600 italic">Start Winning.</span>
+            </h1>
+            <p class="text-xl md:text-2xl text-zinc-400 max-w-3xl mx-auto leading-relaxed font-light">
+                ApexBox is a high-performance telemetry hub that bridges your car's engine vitals and track coordinates into one <span class="text-white font-medium">perfectly synchronized stream</span>.
+            </p>
+            <div class="flex flex-col sm:flex-row justify-center gap-6">
+                <a href="#waitlist" class="btn-primary text-white px-12 py-5 rounded-xl font-black text-[13px] uppercase tracking-[0.3em]">
+                    Join the Founding 10
+                </a>
             </div>
+        </div>
+
+        <div class="max-w-6xl w-full aspect-video rounded-[2.5rem] overflow-hidden border border-zinc-800 bg-zinc-900/50 shadow-2xl relative">
+            <video class="absolute inset-0 w-full h-full object-cover opacity-80" autoplay loop muted playsinline>
+                <source src="0001-0250.webm" type="video/webm">
+            </video>
         </div>
     </section>
 
-    <!-- Section 2: Bento Box Architecture Grid -->
-    <section id="architecture" class="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
-        <h2 class="font-mono text-xs uppercase tracking-[0.3em] text-accent mb-12">Core Architecture</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 auto-rows-[180px]">
-            
-            <!-- Card 1 -->
-            <div class="bento-card p-8 flex flex-col justify-between md:col-span-2">
-                <i data-lucide="cpu" class="text-accent w-8 h-8"></i>
-                <div>
-                    <h3 class="font-mono text-lg font-bold">Dual-Core ESP32-S3 Processing.</h3>
-                    <p class="text-zinc-500 text-sm mt-2">240MHz Xtensa® LX7 with integrated AI acceleration for real-time sensor fusion.</p>
-                </div>
+    <!-- Feature 1: The Telemetry Ticker -->
+    <div class="bg-[#121214] border-y border-zinc-800/50 py-4 overflow-hidden whitespace-nowrap flex relative z-20 ticker-mask">
+        <div class="animate-ticker flex items-center gap-16 px-12">
+            <div class="font-mono text-[10px] uppercase tracking-[0.3em] flex items-center gap-8">
+                <span class="flex gap-2">RPM <span class="text-white font-bold">6420</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">IAT <span class="text-white font-bold">112°F</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">MAP <span class="text-white font-bold">14.2 PSI</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">TPS <span class="text-white font-bold">88%</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">IGN <span class="text-white font-bold">+22.5°</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">OIL_P <span class="text-white font-bold">65 PSI</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2 text-zinc-500">AFR <span class="text-white font-bold">12.8</span></span>
             </div>
-
-            <!-- Card 2 -->
-            <div class="bento-card p-8 flex flex-col justify-between">
-                <i data-lucide="compass" class="text-accent w-8 h-8"></i>
-                <div>
-                    <h3 class="font-mono text-lg font-bold">9-Axis BNO055 IMU.</h3>
-                    <p class="text-zinc-500 text-sm mt-2">Hardware-fused kinematics at 100Hz.</p>
-                </div>
+            <!-- Duplicate for seamless loop -->
+            <div class="font-mono text-[10px] uppercase tracking-[0.3em] flex items-center gap-8 text-zinc-500">
+                <span class="flex gap-2">RPM <span class="text-white font-bold">6420</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">IAT <span class="text-white font-bold">112°F</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">MAP <span class="text-white font-bold">14.2 PSI</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">TPS <span class="text-white font-bold">88%</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">IGN <span class="text-white font-bold">+22.5°</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2">OIL_P <span class="text-white font-bold">65 PSI</span></span>
+                <span class="w-1 h-1 bg-blue-500 rounded-full shadow-[0_0_8px_#3b82f6]"></span>
+                <span class="flex gap-2 text-zinc-500">AFR <span class="text-white font-bold">12.8</span></span>
             </div>
-
-            <!-- Card 3 -->
-            <div class="bento-card p-8 flex flex-col justify-between lg:row-span-2">
-                <i data-lucide="satellite" class="text-accent w-8 h-8"></i>
-                <div>
-                    <h3 class="font-mono text-lg font-bold">MAX-M10S GNSS.</h3>
-                    <p class="text-zinc-500 text-sm mt-2">Concurrent multi-constellation reception (GPS, GLONASS, Galileo, BeiDou) for sub-meter precision.</p>
-                </div>
-            </div>
-
-            <!-- Card 4 -->
-            <div class="bento-card p-8 flex flex-col justify-between md:col-span-2">
-                <i data-lucide="activity" class="text-accent w-8 h-8"></i>
-                <div>
-                    <h3 class="font-mono text-lg font-bold">Direct OBD2 CAN Transceiver Integration.</h3>
-                    <p class="text-zinc-500 text-sm mt-2">High-speed ISO 15765-4 interface for raw ECU parameter extraction.</p>
-                </div>
-            </div>
-
-            <!-- Extra Info Card -->
-            <div class="bento-card p-8 flex flex-col justify-between">
-                <i data-lucide="shield-check" class="text-accent w-8 h-8"></i>
-                <div>
-                    <h3 class="font-mono text-lg font-bold">Industrial Integrity.</h3>
-                    <p class="text-zinc-500 text-sm mt-2">Voltage transient protection for automotive environments.</p>
-                </div>
-            </div>
-
         </div>
-    </section>
+    </div>
 
-    <!-- Section 3: Documentation / Deep Dive -->
-    <section id="docs" class="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
-            <div>
-                <h2 class="font-mono text-xs uppercase tracking-[0.3em] text-accent mb-8">Engineering Notes</h2>
+    <section id="dashboard" class="max-w-7xl mx-auto px-8 py-32 border-t border-zinc-800/50">
+        <div class="text-center mb-20">
+            <h2 class="text-xs font-mono text-blue-500 uppercase tracking-[0.5em] mb-4">The Result</h2>
+            <p class="text-4xl md:text-5xl font-black text-white italic">Unrivaled Track Clarity.</p>
+        </div>
+
+        <div class="dashboard-glass p-1 rounded-[2.5rem] shadow-2xl overflow-hidden max-w-4xl mx-auto">
+            <div class="bg-black/40 p-10 md:p-16 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
                 <div class="space-y-12">
-                    <div class="group">
-                        <h3 class="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">PCB Routing Logic</h3>
-                        <p class="text-zinc-400 leading-relaxed font-mono text-sm">
-                            Isolating high-frequency engine harmonics via dedicated ground plane design. 
-                            Controlled impedance differential pairs for high-speed CAN signals ensure 
-                            zero packet loss even in EMI-heavy engine bays.
-                        </p>
+                    <div class="space-y-2">
+                        <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Live Speed</p>
+                        <div class="flex items-end gap-2">
+                            <span id="live-speed" class="text-6xl font-black text-white font-mono tracking-tighter">0</span>
+                            <span class="text-xl font-bold text-blue-500 mb-1">MPH</span>
+                        </div>
+                        <p class="text-[11px] font-mono text-zinc-600 uppercase italic">GPS_VALIDATED_STREAM</p>
                     </div>
-                    <div class="group">
-                        <h3 class="text-2xl font-bold mb-4 group-hover:text-accent transition-colors">Power Delivery Specs</h3>
-                        <p class="text-zinc-400 leading-relaxed font-mono text-sm">
-                            Integrated buck-boost stage supporting 6V to 36V input. 
-                            Ultra-low noise LDOs for the GNSS and IMU rails to preserve signal 
-                            integrity during high-load ECU polling.
-                        </p>
+                    <div class="space-y-2">
+                        <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Long. Load (Brake/Accel)</p>
+                        <div class="flex items-end gap-2">
+                            <span id="live-gforce" class="text-6xl font-black text-white font-mono tracking-tighter transition-colors duration-150">0.00 G</span>
+                        </div>
+                        <p class="text-[11px] font-mono text-zinc-600 uppercase italic">ACTIVE_IMU_FUSION</p>
                     </div>
                 </div>
-            </div>
-            
-            <div class="space-y-4">
-                <div class="aspect-video bg-zinc-900 brutalist-border flex items-center justify-center relative group">
-                    <span class="font-mono text-zinc-700 uppercase tracking-widest group-hover:text-accent transition-colors">[ KiCad Schematic Placeholder ]</span>
-                    <div class="absolute bottom-4 left-4 font-mono text-[10px] text-zinc-500">REF: APX-SCH-V1.2</div>
-                </div>
-                <div class="aspect-video bg-zinc-900 brutalist-border flex items-center justify-center relative group">
-                    <span class="font-mono text-zinc-700 uppercase tracking-widest group-hover:text-accent transition-colors">[ PCB Layout Placeholder ]</span>
-                    <div class="absolute bottom-4 left-4 font-mono text-[10px] text-zinc-500">LAYER: SIGNAL_TOP / GND_INNER</div>
+                <div class="space-y-10 border-l border-zinc-800/50 pl-10 md:pl-16">
+                    <div class="aspect-square bg-zinc-900/50 rounded-2xl border border-white/5 flex items-center justify-center p-8 relative overflow-hidden">
+                        <svg class="w-full h-full text-blue-500 opacity-90" viewBox="775 501 991 984" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path id="track-path"
+                                d="m 1158.08,1461.8555 c 11.9482,2.3557 23.9136,2.4775 36.08,2.3467 60.5803,-0.6514 122.2773,-0.289 182.16,-6.4534 19.904,-2.0489 39.1963,-8.6518 57.4933,-17.0133 54.4497,-24.8829 105.0929,-51.2128 157.8134,-79.4933 6.3373,-3.3995 13.8775,-9.641 17.3067,-15.5467 3.6108,-6.2187 5.901,-15.2192 4.6933,-22.2933 -1.5301,-8.9615 -4.1646,-18.4022 -9.9734,-25.8134 -5.5334,-7.0599 -13.8636,-14.7617 -22,-17.6 -8.6813,-3.0284 -22.286,-1.9945 -30.2133,2.64 -17.4949,10.2278 -28.7768,29.2538 -46.0533,41.9467 -21.0524,15.4671 -44.0523,29.557 -68.0534,39.8933 -29.5811,12.7393 -61.508,19.9285 -92.6933,26.1067 -10.2725,2.0352 -22.6711,-0.74 -31.9733,-4.9867 -8.6889,-3.9667 -19.1732,-16.6716 -21.7067,-26.1066 -20.1509,-75.045 -30.7723,-146.4416 -46.0533,-223.8134 -2.495,-12.6808 0.2164,-27.0801 4.6933,-38.72 3.3453,-8.6978 10.6648,-17.0691 18.7733,-22.2933 50.1671,-32.3224 98.1008,-59.7516 151.6534,-86.23998 19.194,-9.49383 50.3983,-17.61049 71.5733,-21.41334 74.6472,-13.40604 142.1233,-22.38443 217.6533,-34.90667 14.5815,-2.41749 28.421,-14.63034 37.84,-25.22666 6.2255,-7.00368 9.2465,-17.69022 10.2667,-27.28 0.9354,-8.79244 2.0407,-26.61067 -5.5733,-39.30666 -67.8425,-113.12376 -134.7293,-207.54162 -209.4401,-315.33334 -3.9025,-5.6305 -16.0072,-11.77945 -22.8799,-12.32 -27.9361,-2.19723 -56.3308,-2.34667 -84.48,-2.34667 -14.0908,0 -35.7663,0.18099 -48.9867,4.69334 -52.0952,17.78099 -95.6094,40.95519 -146.96,62.18666 -30.0006,12.40408 -61.2755,22.17061 -90.3467,36.37334 -22.1643,10.82838 -41.8332,28.83185 -64.8267,36.66667 -29.8065,10.15629 -59.3356,9.06669 -89.4666,14.95999 -5.54182,1.08393 -14.05966,6.52617 -14.08,16.72001 -0.0183,9.18027 6.83964,18.34232 7.04,28.15999 0.19075,9.34677 -5.00011,24.48288 -12.90667,30.50667 -17.83847,13.59062 -33.24007,22.30297 -53.38666,31.97333 -18.96452,9.10297 -40.07972,12.09993 -58.66667,21.70667 -16.22194,8.38437 -31.24436,21.05767 -41.94667,35.2 -11.19992,14.79989 -20.04227,33.04452 -21.12,51.62667 -0.72472,12.49549 5.09548,30.26537 12.90667,40.48 43.03326,56.27427 90.97418,103.70548 136.98667,158.98668 8.35196,10.0344 17.19835,23.3513 17.6,35.2 0.38057,11.2268 -7.98662,23.9871 -15.25334,34.0266 -52.18217,72.0938 -107.49131,135.0335 -159.86666,205.6267 -9.12411,12.2978 -9.83028,23.1816 -3.22667,30.8 5.83081,6.7268 29.20796,5.3992 43.70667,8.5067 115.75023,24.8083 207.56903,43.8451 325.89333,67.1733 z"
+                                stroke="currentColor" 
+                                stroke-width="15" 
+                                stroke-linecap="round" 
+                                stroke-linejoin="round"
+                                style="filter: drop-shadow(0 0 15px rgba(59, 130, 246, 0.6));" />
+                            <circle id="car-dot" r="14" fill="white" style="filter: drop-shadow(0 0 12px #fff);" />
+                        </svg>
+                        
+                        <div class="absolute bottom-6 left-8 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+                            Laguna Seca // 2.238 MI
+                        </div>
+                    </div>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-end font-mono">
+                            <p class="text-[9px] text-zinc-500 uppercase tracking-widest">Throttle</p>
+                            <p id="live-throttle" class="text-lg font-bold text-blue-500">0%</p>
+                        </div>
+                        <div class="w-full h-1.5 bg-zinc-800 rounded-full overflow-hidden border border-white/5">
+                            <div id="throttle-bar" class="h-full bg-blue-500 w-0 transition-all duration-150 ease-linear shadow-[0_0_10px_rgba(59,130,246,0.5)]"></div>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4 font-mono mt-6">
+                        <div>
+                            <p class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1 font-bold text-blue-500">Slip Angle</p>
+                            <p id="live-slip" class="text-lg font-bold text-blue-500">0.0°</p>
+                        </div>
+                        <div>
+                            <p class="text-[9px] text-zinc-500 uppercase tracking-widest mb-1">Oil Temp</p>
+                            <p class="text-lg font-bold text-zinc-200">218 °F</p>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="max-w-7xl mx-auto px-6 py-12 border-t border-white/5 text-center">
-        <div class="font-mono text-[10px] uppercase tracking-[0.5em] text-zinc-600">
-            &copy; 2026 APEXBOX // NO MARKETING FLUFF // PURE DATA
+    <section id="features" class="max-w-7xl mx-auto px-8 py-32 border-t border-zinc-800/50">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="space-y-6 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                    <i data-lucide="bluetooth"></i>
+                </div>
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter">Zero-Lag <br/>Bluetooth</h3>
+                <p class="text-zinc-500 text-sm leading-relaxed">
+                    Instant connection to your phone the second you turn the key. Our dual-core engine ensures no dropped data packets, even during the most violent pulls.
+                </p>
+            </div>
+
+            <div class="space-y-6 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                    <i data-lucide="navigation"></i>
+                </div>
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter">True Cornering <br/>Dynamics</h3>
+                <p class="text-zinc-500 text-sm leading-relaxed">
+                    Measure your exact G-forces through the apex and braking zones. See exactly where you are leaving time on the table with sub-meter track mapping.
+                </p>
+            </div>
+
+            <div class="space-y-6 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                    <i data-lucide="target"></i>
+                </div>
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter">Surgical <br/>Lap Timing</h3>
+                <p class="text-zinc-500 text-sm leading-relaxed">
+                    25 updates per second means we capture your exact position down to the inch. Zero doubt on your 0-60 times and lap consistency.
+                </p>
+            </div>
+
+            <div class="space-y-6 group">
+                <div class="w-14 h-14 rounded-2xl bg-blue-500/10 flex items-center justify-center text-blue-500 group-hover:bg-blue-500 group-hover:text-white transition-all">
+                    <i data-lucide="zap"></i>
+                </div>
+                <h3 class="text-2xl font-black italic uppercase tracking-tighter">Plug-and-Play <br/>OBD2</h3>
+                <p class="text-zinc-500 text-sm leading-relaxed">
+                    Pull raw RPM, boost pressure, and throttle position directly from your ECU to overlay onto your track footage. No complex wiring required.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-8 py-40 border-t border-zinc-800/50 bg-[#0c0c0e]/50">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div class="space-y-10">
+                <h2 class="text-5xl md:text-6xl font-black italic tracking-tighter leading-none">Your Data, <br/><span class="text-blue-500">Visualized.</span></h2>
+                <p class="text-zinc-400 text-xl leading-relaxed font-light">
+                    Hardware is only half the battle. ApexBox is building an ecosystem designed for the modern competitor. Seamless leaderboards, cinematic video overlays, and a historical digital garage.
+                </p>
+                <div class="space-y-6">
+                    <div class="flex items-center gap-5">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                            <i data-lucide="video" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-white font-bold uppercase tracking-widest text-xs">Cinematic Video Overlays</p>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                            <i data-lucide="users" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-white font-bold uppercase tracking-widest text-xs">Global Leaderboards</p>
+                    </div>
+                    <div class="flex items-center gap-5">
+                        <div class="w-10 h-10 rounded-full bg-blue-500/10 flex items-center justify-center text-blue-500">
+                            <i data-lucide="cloud" class="w-5 h-5"></i>
+                        </div>
+                        <p class="text-white font-bold uppercase tracking-widest text-xs">Cloud Analysis</p>
+                    </div>
+                </div>
+            </div>
+            <div class="relative perspective-1000">
+                <div class="aspect-[9/16] max-w-[300px] mx-auto bg-[#050506] rounded-[3rem] border-[10px] border-zinc-800 shadow-2xl overflow-hidden relative hover-tilt group">
+                    <!-- App Interface -->
+                    <div class="absolute inset-0 flex flex-col">
+                        <!-- App Header -->
+                        <div class="p-6 pt-10 border-b border-white/5 bg-zinc-900/50 backdrop-blur-md">
+                            <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Session</p>
+                            <h4 class="text-white font-bold tracking-tight">Laguna Seca</h4>
+                        </div>
+                        
+                        <!-- App Content -->
+                        <div class="flex-1 p-6 space-y-6">
+                            <!-- PB Card -->
+                            <div class="p-6 bg-zinc-900 rounded-3xl border border-white/5 space-y-2 relative overflow-hidden">
+                                <div class="absolute top-0 right-0 p-4 opacity-10">
+                                    <i data-lucide="timer" class="w-12 h-12 text-blue-500"></i>
+                                </div>
+                                <p class="text-[10px] font-mono text-blue-500 uppercase tracking-widest font-bold">Personal Best</p>
+                                <p class="text-3xl font-black text-white font-mono">1:34.29</p>
+                                <p class="text-xs font-bold text-green-500 font-mono">-0.42s <span class="text-[9px] text-zinc-600 uppercase ml-1">vs Average</span></p>
+                            </div>
+
+                            <!-- Mini Graph Mockup -->
+                            <div class="h-32 w-full bg-zinc-900 rounded-3xl border border-white/5 p-4 flex items-end gap-1">
+                                <div class="flex-1 bg-blue-500/20 h-[40%] rounded-t-sm"></div>
+                                <div class="flex-1 bg-blue-500/40 h-[60%] rounded-t-sm"></div>
+                                <div class="flex-1 bg-blue-500 h-[100%] rounded-t-sm shadow-[0_0_15px_rgba(59,130,246,0.5)]"></div>
+                                <div class="flex-1 bg-blue-500/60 h-[80%] rounded-t-sm"></div>
+                                <div class="flex-1 bg-blue-500/30 h-[50%] rounded-t-sm"></div>
+                            </div>
+                        </div>
+
+                        <!-- App Bottom Nav -->
+                        <div class="p-6 border-t border-white/5 flex justify-between items-center bg-zinc-900/80">
+                            <i data-lucide="home" class="w-5 h-5 text-blue-500"></i>
+                            <i data-lucide="play-circle" class="w-5 h-5 text-zinc-600"></i>
+                            <i data-lucide="bar-chart-2" class="w-5 h-5 text-zinc-600"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Feature 2: The 25Hz Advantage -->
+    <section class="max-w-7xl mx-auto px-8 py-40 border-t border-zinc-800/50">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-24 items-center">
+            <div class="space-y-8">
+                <h2 class="text-5xl md:text-6xl font-black italic tracking-tighter uppercase leading-none">The 25Hz <br/><span class="text-blue-500">Advantage.</span></h2>
+                <p class="text-zinc-400 text-xl leading-relaxed font-light">
+                    Standard 1Hz GPS trackers cut corners and guess your position. Our 25Hz GNSS engine captures every inch of the circuit, ensuring your line is captured with surgical accuracy.
+                </p>
+                <div class="flex gap-12 pt-6">
+                    <div class="space-y-2">
+                        <p class="text-2xl font-black text-white font-mono">25<span class="text-sm text-blue-500 ml-1 text-glow">Hz</span></p>
+                        <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Update Frequency</p>
+                    </div>
+                    <div class="space-y-2">
+                        <p class="text-2xl font-black text-white font-mono">0.5<span class="text-sm text-blue-500 ml-1 text-glow">M</span></p>
+                        <p class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">Horizontal Accuracy</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="relative aspect-square max-w-lg mx-auto bg-zinc-900 rounded-[3rem] border border-white/5 overflow-hidden group">
+                <!-- Base Layer (1Hz) -->
+                <div class="absolute inset-0 flex items-center justify-center p-12 opacity-40 blur-[1px]">
+                    <svg class="w-full h-auto" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 20 C 180 20, 180 180, 20 180" stroke="#1c1c21" stroke-width="30" stroke-linecap="round"/>
+                        <path d="M30 40 L 140 40 L 140 160 L 30 160" stroke="#ef4444" stroke-width="3" stroke-linejoin="bevel"/>
+                        <circle cx="30" cy="40" r="4" fill="#ef4444"/>
+                        <circle cx="140" cy="40" r="4" fill="#ef4444"/>
+                        <circle cx="140" cy="160" r="4" fill="#ef4444"/>
+                        <circle cx="30" cy="160" r="4" fill="#ef4444"/>
+                    </svg>
+                    <div class="absolute top-8 left-8 text-[10px] font-mono text-red-500 font-black">1Hz STANDARD</div>
+                </div>
+
+                <!-- Overlay Layer (25Hz) -->
+                <div id="comparison-overlay" class="absolute inset-0 bg-zinc-900 flex items-center justify-center p-12 border-r border-white/20" style="width: 50%;">
+                    <div class="w-[400px] h-[400px] flex-shrink-0 flex items-center justify-center">
+                        <svg class="w-full h-auto" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 20 C 180 20, 180 180, 20 180" stroke="#1c1c21" stroke-width="30" stroke-linecap="round"/>
+                            <path d="M30 40 C 150 40, 150 160, 30 160" stroke="#3b82f6" stroke-width="4" stroke-linecap="round" style="filter: drop-shadow(0 0 12px #3b82f6);"/>
+                        </svg>
+                    </div>
+                    <div class="absolute top-8 right-8 text-[10px] font-mono text-blue-500 font-black whitespace-nowrap">25Hz APEXBOX</div>
+                </div>
+
+                <!-- Slider Control -->
+                <input type="range" min="0" max="100" value="50" class="comparison-slider absolute inset-0 opacity-0" id="hz-slider">
+                
+                <!-- Visual Handle -->
+                <div id="slider-handle" class="absolute top-0 bottom-0 w-px bg-white z-30 pointer-events-none" style="left: 50%;">
+                    <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 bg-white rounded-full flex items-center justify-center shadow-xl">
+                        <i data-lucide="chevrons-left-right" class="w-4 h-4 text-black"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section: Transparent Engineering -->
+    <section class="max-w-7xl mx-auto px-8 py-40 border-t border-zinc-800/50">
+        <div class="max-w-3xl mb-20 space-y-4">
+            <h2 class="text-xs font-mono text-blue-500 uppercase tracking-[0.5em] font-bold">Silicon-Level Transparency</h2>
+            <p class="text-4xl md:text-5xl font-black text-white italic tracking-tighter uppercase">Professional Hardware. <br/>Zero Secrets.</p>
+            <p class="text-zinc-500 text-lg leading-relaxed font-light">We don't hide our architecture. Here is exactly what is calculating your telemetry.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Card 1: Velocity -->
+            <div class="md:col-span-2 relative p-10 rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#09090b] overflow-hidden group">
+                <i data-lucide="microchip" class="absolute -bottom-8 -right-8 w-48 h-48 text-white opacity-[0.03] -rotate-12 group-hover:opacity-[0.05] transition-opacity"></i>
+                <div class="relative z-10 space-y-6">
+                    <p class="text-5xl md:text-6xl font-black text-white font-mono tracking-tighter">0.11 <span class="text-xl text-blue-500 font-bold uppercase ml-1">MPH Accuracy</span></p>
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">Instant Velocity</h4>
+                        <p class="text-zinc-500 text-sm leading-relaxed max-w-lg">
+                            While phone apps guess your speed using delayed GPS points, our engine measures your actual movement 25 times per second. Your 60-130 pulls are verified, indisputable, and accurate to within a tenth of a mile per hour.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 2: Orientation -->
+            <div class="relative p-10 rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#09090b] overflow-hidden group">
+                <i data-lucide="compass" class="absolute -bottom-4 -right-4 w-32 h-32 text-white opacity-[0.03] group-hover:opacity-[0.05] transition-opacity"></i>
+                <div class="relative z-10 space-y-6">
+                    <p class="text-4xl font-black text-white font-mono tracking-tighter uppercase">ANTI-GIMBAL</p>
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">Camber Correction</h4>
+                        <p class="text-zinc-500 text-xs leading-relaxed">
+                            Standard loggers get confused on steep hills or banked turns. ApexBox uses advanced 4D orientation math to stay perfectly aligned with the horizon, even on the most aggressive track cambers.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 3: Sensitivity -->
+            <div class="relative p-10 rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#09090b] overflow-hidden group">
+                <i data-lucide="satellite" class="absolute -bottom-4 -right-4 w-32 h-32 text-white opacity-[0.03] group-hover:opacity-[0.05] transition-opacity"></i>
+                <div class="relative z-10 space-y-6">
+                    <p class="text-4xl font-black text-white font-mono tracking-tighter uppercase">SOLID LOCK</p>
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">Signal Sensitivity</h4>
+                        <p class="text-zinc-500 text-xs leading-relaxed">
+                            Maintains a rock-solid 3D positional lock where other devices drop out—under heavy tree cover, bridges, or through circuits with high signal-blocking obstacles.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Card 4: Drift -->
+            <div class="md:col-span-2 relative p-10 rounded-2xl border border-zinc-800 bg-gradient-to-br from-zinc-900 to-[#09090b] overflow-hidden group">
+                <i data-lucide="merge" class="absolute -bottom-8 -right-8 w-48 h-48 text-white opacity-[0.03] rotate-12 group-hover:opacity-[0.05] transition-opacity"></i>
+                <div class="relative z-10 space-y-6">
+                    <p class="text-5xl md:text-6xl font-black text-white font-mono tracking-tighter italic text-glow">DRIFT REJECTION</p>
+                    <div class="space-y-2">
+                        <h4 class="text-xs font-mono text-zinc-400 uppercase tracking-widest font-bold">Interference Strategy</h4>
+                        <p class="text-zinc-500 text-sm leading-relaxed max-w-lg">
+                            Race car engine bays create massive electrical noise that ruins standard sensors. Our fusion engine ignores magnetic interference by anchoring the 100Hz orientation data to your GPS velocity vector—ensuring your racing line stays smooth and true regardless of electrical load.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- The Kill Table: Direct Comparison -->
+        <div class="mt-32 max-w-4xl mx-auto">
+            <div class="text-center mb-16 space-y-2">
+                <h3 class="text-2xl font-black italic uppercase tracking-widest">The Performance Gap</h3>
+                <p class="text-zinc-500 font-mono text-[10px] uppercase tracking-[0.3em]">ApexBox vs. Standard OBD2 Hardware</p>
+            </div>
+            <div class="bg-zinc-900/30 rounded-3xl border border-zinc-800 overflow-hidden">
+                <table class="w-full font-mono text-[11px] border-collapse uppercase tracking-widest">
+                    <thead>
+                        <tr class="border-b border-zinc-800 text-zinc-500">
+                            <th class="p-6 text-left font-normal">Metric</th>
+                            <th class="p-6 text-center font-normal">Standard Dongle</th>
+                            <th class="p-6 text-center font-normal text-blue-500">ApexBox</th>
+                        </tr>
+                    </thead>
+                    <tbody class="text-zinc-400">
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-left">GPS Update Rate</td>
+                            <td class="p-6 text-center">1Hz - 10Hz</td>
+                            <td class="p-6 text-center text-white font-bold">25Hz</td>
+                        </tr>
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-left">End-to-End Latency</td>
+                            <td class="p-6 text-center">~300ms</td>
+                            <td class="p-6 text-center text-white font-bold">< 10ms</td>
+                        </tr>
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-left">Engine Data Source</td>
+                            <td class="p-6 text-center">Slow OBD Requests</td>
+                            <td class="p-6 text-center text-white font-bold">Direct CAN Polling</td>
+                        </tr>
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-left">Data Synchronicity</td>
+                            <td class="p-6 text-center">Software Sync</td>
+                            <td class="p-6 text-center text-white font-bold">Hardware Fused</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 text-left">Thermal Stability</td>
+                            <td class="p-6 text-center">Standard Plastic</td>
+                            <td class="p-6 text-center text-white font-bold">MJF Nylon PA12</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section class="max-w-7xl mx-auto px-8 py-32 border-t border-zinc-800/50">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <div class="space-y-6">
+                <h2 class="text-3xl font-black italic uppercase tracking-tighter">Technical Pedigree.</h2>
+                <p class="text-zinc-500 text-sm leading-relaxed max-w-md">
+                    Engineered without compromise. From the aerospace-grade MJF Nylon housing to the u-blox 10th-gen GNSS engine, every part is chosen for performance under extreme track heat.
+                </p>
+            </div>
+            <div class="bg-zinc-950/50 rounded-3xl border border-zinc-800 overflow-hidden">
+                <table class="w-full text-xs font-mono">
+                    <tbody>
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-zinc-500 uppercase tracking-widest">Update Rate</td>
+                            <td class="p-6 text-white font-bold">25Hz GNSS / 100Hz IMU</td>
+                        </tr>
+                        <tr class="border-b border-zinc-800/50">
+                            <td class="p-6 text-zinc-500 uppercase tracking-widest">ECU Link</td>
+                            <td class="p-6 text-white font-bold">ISO 15765-4 (500Kbps)</td>
+                        </tr>
+                        <tr>
+                            <td class="p-6 text-zinc-500 uppercase tracking-widest">Thermal</td>
+                            <td class="p-6 text-white font-bold">Stable to 110°C (230°F)</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </section>
+
+    <section id="waitlist" class="max-w-4xl mx-auto px-8 py-48 border-t border-zinc-800/50">
+        <div class="text-center space-y-12">
+            <h2 class="text-5xl md:text-7xl font-black text-white italic tracking-tighter">Secure Your Batch_01.</h2>
+            <p class="text-zinc-400 text-lg max-w-2xl mx-auto font-light leading-relaxed">
+                We are producing a limited run of <span class="text-white font-bold">10 Founding Units</span> for the final validation phase. Join the waitlist for priority access.
+            </p>
+            
+            <form id="waitlist-form" class="space-y-6 text-left max-w-xl mx-auto pt-10">
+                <div class="space-y-2">
+                    <label class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Email Address</label>
+                    <input type="email" required placeholder="name@email.com" class="w-full py-5 px-8 rounded-2xl text-white font-bold transition-all">
+                </div>
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div class="space-y-2">
+                        <label class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Vehicle Year</label>
+                        <input type="text" placeholder="2024" class="w-full py-5 px-8 rounded-2xl text-white font-bold transition-all">
+                    </div>
+                    <div class="md:col-span-2 space-y-2">
+                        <label class="text-[10px] font-mono uppercase tracking-widest text-zinc-500 font-bold">Make & Model</label>
+                        <input type="text" placeholder="Porsche GT3 RS" class="w-full py-5 px-8 rounded-2xl text-white font-bold transition-all">
+                    </div>
+                </div>
+                <button type="submit" class="w-full btn-primary text-white py-6 rounded-2xl font-black uppercase tracking-[0.4em] text-xs">
+                    Join the Founding 10
+                </button>
+            </form>
+
+            <div id="form-success" class="hidden space-y-6 pt-12">
+                <div class="w-20 h-20 bg-blue-500/20 text-blue-500 rounded-full flex items-center justify-center mx-auto shadow-[0_0_40px_rgba(59,130,246,0.2)]">
+                    <i data-lucide="check" class="w-10 h-10"></i>
+                </div>
+                <h3 class="text-3xl font-black text-white italic uppercase tracking-tighter">You're on the list.</h3>
+                <p class="text-zinc-500 font-mono text-[11px] uppercase tracking-widest tracking-[0.2em]">Priority status allocated for Batch_01.</p>
+            </div>
+        </div>
+    </section>
+
+    <footer class="max-w-7xl mx-auto px-8 py-20 border-t border-zinc-800/50 flex flex-col md:flex-row justify-between items-center gap-12 text-zinc-600 text-[10px] font-mono uppercase tracking-widest">
+        <div>&copy; 2026 APEXBOX // SYSTEM_PROTOTYPE_V3</div>
+        <div class="flex gap-10">
+            <a href="#" class="hover:text-white transition-colors">Instagram</a>
+            <a href="#" class="hover:text-white transition-colors">Privacy</a>
         </div>
     </footer>
 
     <script>
-        // Initialize Lucide icons
         lucide.createIcons();
+        
+        // --- LOOKAHEAD PHYSICS ENGINE ---
+        
+        const trackPath = document.getElementById('track-path');
+        const carDot = document.getElementById('car-dot');
+        const speedEl = document.getElementById('live-speed');
+        const gforceEl = document.getElementById('live-gforce');
+        const throttleEl = document.getElementById('live-throttle');
+        const throttleBar = document.getElementById('throttle-bar');
+        const slipEl = document.getElementById('live-slip');
+
+        let isPlaying = false;
+        let distance = 0;
+        const totalLength = trackPath.getTotalLength();
+        
+        // Physics State
+        let actualSpeed = 50;
+        let previousSpeed = 50;
+        let throttle = 0;
+        let longG = 0;
+        
+        // UI Throttling
+        let lastUpdateTime = 0;
+        const updateFrequency = 150; // Text updates at readable speed
+
+        function animate(currentTime) {
+            if (!isPlaying) return;
+
+            // 1. Current Track Curvature (Where the car is right now)
+            const p1 = trackPath.getPointAtLength(distance % totalLength);
+            const p2 = trackPath.getPointAtLength((distance + 2) % totalLength);
+            const p3 = trackPath.getPointAtLength((distance + 4) % totalLength);
+
+            const a1 = Math.atan2(p2.y - p1.y, p2.x - p1.x);
+            const a2 = Math.atan2(p3.y - p2.y, p3.x - p2.x);
+            let currentCurve = Math.abs(a2 - a1);
+            if (currentCurve > Math.PI) currentCurve = Math.abs(currentCurve - 2 * Math.PI);
+
+            // 2. Upcoming Track Curvature (The Braking Zone Lookahead)
+            // Look further ahead the faster we are going
+            const lookahead = Math.max(10, actualSpeed * 0.2); 
+            const pAhead1 = trackPath.getPointAtLength((distance + lookahead) % totalLength);
+            const pAhead2 = trackPath.getPointAtLength((distance + lookahead + 2) % totalLength);
+            const pAhead3 = trackPath.getPointAtLength((distance + lookahead + 4) % totalLength);
+
+            const ah1 = Math.atan2(pAhead2.y - pAhead1.y, pAhead2.x - pAhead1.x);
+            const ah2 = Math.atan2(pAhead3.y - pAhead2.y, pAhead3.x - pAhead2.x);
+            let upcomingCurve = Math.abs(ah2 - ah1);
+            if (upcomingCurve > Math.PI) upcomingCurve = Math.abs(upcomingCurve - 2 * Math.PI);
+
+            // 3. Throttle & Speed Logic
+            let targetSpeed = 145;
+            let targetThrottle = 100;
+            let braking = false;
+
+            const curveThreshold = 0.03; // Threshold for defining a "straight"
+
+            if (upcomingCurve > curveThreshold) {
+                // Approaching a corner -> Heavy Braking
+                targetSpeed = Math.max(45, 140 - (upcomingCurve * 1200));
+                targetThrottle = 0;
+                braking = true;
+            } else if (currentCurve > curveThreshold) {
+                // In the corner, but looking at a straight -> Maintenance Throttle
+                targetSpeed = actualSpeed + 10;
+                targetThrottle = 65 + (Math.random() * 15);
+            } else {
+                // Dead Straight -> Pin the throttle
+                targetSpeed = 150;
+                targetThrottle = 100;
+            }
+
+            // Apply Momentum (Lerp)
+            previousSpeed = actualSpeed;
+            if (braking) {
+                actualSpeed += (targetSpeed - actualSpeed) * 0.06; // Brakes bite hard
+            } else {
+                actualSpeed += (targetSpeed - actualSpeed) * 0.015; // Aero drag limits acceleration
+            }
+
+            // Smooth throttle visualization
+            throttle += (targetThrottle - throttle) * 0.2;
+
+            // 4. Calculate Longitudinal G-Force (Accel/Brake)
+            const speedDelta = actualSpeed - previousSpeed;
+            longG = speedDelta * 1.8; // Convert speed delta to realistic G's
+            
+            // Add tiny engine vibration to Gs when pinning the throttle, clamp strictly to 0 when cruising
+            if (Math.abs(longG) < 0.02 && throttle > 95) longG = 0.02 + (Math.random() * 0.03);
+            if (Math.abs(longG) < 0.01) longG = 0.0;
+
+            // 5. Calculate Slip Angle
+            let slipAngle = 0;
+            if (currentCurve > curveThreshold) {
+                // Only slip when pulling Gs in the corner
+                slipAngle = (currentCurve * 35) + (Math.random() * 0.8);
+            } else {
+                // Strict zero on straights
+                slipAngle = 0.0;
+            }
+
+            // 6. Update Car Position (60 FPS Smooth)
+            const speedStep = actualSpeed * 0.007;
+            distance = (distance + speedStep) % totalLength;
+            carDot.setAttribute('cx', p1.x);
+            carDot.setAttribute('cy', p1.y);
+
+            // 7. Throttled Text Updates (Readable Refresh)
+            if (currentTime - lastUpdateTime > updateFrequency) {
+                speedEl.innerText = Math.floor(actualSpeed);
+                
+                // Format G-Force with explicit +/- sign
+                const gSign = longG >= 0 ? "+" : "";
+                gforceEl.innerText = `${gSign}${longG.toFixed(2)} G`;
+                
+                // Red for braking, Green for accel, White for neutral
+                if (longG < -0.3) gforceEl.style.color = "#ef4444"; 
+                else if (longG > 0.2) gforceEl.style.color = "#22c55e"; 
+                else gforceEl.style.color = "white";
+
+                throttleEl.innerText = Math.floor(throttle) + "%";
+                throttleBar.style.width = throttle + "%";
+                
+                slipEl.innerText = slipAngle.toFixed(1) + "°";
+                
+                lastUpdateTime = currentTime;
+            }
+
+            requestAnimationFrame(animate);
+        }
+
+        // --- INTERSECTION OBSERVER ---
+        // Shuts down the math engine when the user scrolls away to save battery
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    isPlaying = true;
+                    requestAnimationFrame(animate);
+                } else {
+                    isPlaying = false;
+                }
+            });
+        }, { threshold: 0.1 });
+
+        observer.observe(document.getElementById('dashboard'));
+
+        // --- COMPARISON SLIDER ---
+        const hzSlider = document.getElementById('hz-slider');
+        const comparisonOverlay = document.getElementById('comparison-overlay');
+        const sliderHandle = document.getElementById('slider-handle');
+
+        if (hzSlider) {
+            hzSlider.addEventListener('input', (e) => {
+                const value = e.target.value;
+                comparisonOverlay.style.width = `${value}%`;
+                sliderHandle.style.left = `${value}%`;
+            });
+        }
+
+        // Form Submission
+        document.getElementById('waitlist-form').addEventListener('submit', (e) => {
+            e.preventDefault();
+            document.getElementById('waitlist-form').classList.add('hidden');
+            document.getElementById('form-success').classList.remove('hidden');
+        });
     </script>
 </body>
 </html>
